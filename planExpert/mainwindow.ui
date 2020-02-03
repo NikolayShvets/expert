@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>614</width>
+    <height>440</height>
+   </rect>
+  </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="mouseTracking">
+    <bool>true</bool>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="widgetResizable">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>592</width>
+         <height>367</height>
+        </rect>
+       </property>
+       <property name="mouseTracking">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>614</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="actionOpenMap"/>
+    <addaction name="actionCloseMap"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+    <addaction name="actionCreateScript"/>
+   </widget>
+   <widget class="QMenu" name="menuLimits">
+    <property name="title">
+     <string>Лимиты</string>
+    </property>
+    <addaction name="actionMemoryLimit"/>
+    <addaction name="actionListCountLimit"/>
+   </widget>
+   <widget class="QMenu" name="menuPrecision">
+    <property name="title">
+     <string>Калибровка</string>
+    </property>
+    <addaction name="actionInc"/>
+    <addaction name="actionDec"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>Вид</string>
+    </property>
+    <widget class="QMenu" name="gridStepMenu">
+     <property name="title">
+      <string>Шаг сетки</string>
+     </property>
+     <addaction name="gridStepLittleAction"/>
+     <addaction name="gridStepBigAction"/>
+    </widget>
+    <widget class="QMenu" name="gridColorMenu">
+     <property name="title">
+      <string>Цвет сетки</string>
+     </property>
+     <addaction name="gridColorBlackAction"/>
+     <addaction name="gridColorGreenAction"/>
+    </widget>
+    <widget class="QMenu" name="gridThicknessMenu">
+     <property name="title">
+      <string>Толщина сетки</string>
+     </property>
+     <addaction name="gridThinAction"/>
+     <addaction name="gridThickAction"/>
+    </widget>
+    <addaction name="actionSetScale100000"/>
+    <addaction name="actionSetScale200000"/>
+    <addaction name="separator"/>
+    <addaction name="actionMoveWindowCenterToPoint"/>
+    <addaction name="actionMoveWindowCenterToObject"/>
+    <addaction name="separator"/>
+    <addaction name="actionTurnOn30Degrees"/>
+    <addaction name="actionRestoreViewAfterTurning"/>
+    <addaction name="separator"/>
+    <addaction name="actionViewGrid"/>
+    <addaction name="gridStepMenu"/>
+    <addaction name="gridThicknessMenu"/>
+    <addaction name="gridColorMenu"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>Система координат</string>
+    </property>
+    <widget class="QMenu" name="menu_WGS_1984">
+     <property name="title">
+      <string>Геодезическая (Международный эллипсоид WGS 1984г.)</string>
+     </property>
+     <addaction name="actionSetCoordinatesInRadians"/>
+     <addaction name="actionSetCoordinatesInDegrees"/>
+     <addaction name="actionSetCoordinatesInDegreesMinutesSeconds"/>
+    </widget>
+    <addaction name="actionSetCoordinatesInMeters"/>
+    <addaction name="menu_WGS_1984"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuView"/>
+   <addaction name="menuPrecision"/>
+   <addaction name="menuLimits"/>
+   <addaction name="menu_3"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionOpenMap">
+   <property name="text">
+    <string>Открыть</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Выход</string>
+   </property>
+  </action>
+  <action name="action123">
+   <property name="text">
+    <string>123</string>
+   </property>
+  </action>
+  <action name="actionCloseMap">
+   <property name="text">
+    <string>Закрыть</string>
+   </property>
+  </action>
+  <action name="actionMemoryLimit">
+   <property name="text">
+    <string>Размер используемой памяти</string>
+   </property>
+  </action>
+  <action name="actionListCountLimit">
+   <property name="text">
+    <string>Число открытых листов</string>
+   </property>
+  </action>
+  <action name="actionInc">
+   <property name="text">
+    <string>Увеличить точность</string>
+   </property>
+  </action>
+  <action name="actionDec">
+   <property name="text">
+    <string>Уменьшить точность</string>
+   </property>
+  </action>
+  <action name="action_60">
+   <property name="text">
+    <string>+60%</string>
+   </property>
+  </action>
+  <action name="actionViewGrid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Отображение сетки</string>
+   </property>
+  </action>
+  <action name="actionGridParams">
+   <property name="text">
+    <string>Параметры сетки</string>
+   </property>
+  </action>
+  <action name="gridStepBigAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Крупный</string>
+   </property>
+  </action>
+  <action name="gridStepLittleAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Мелкий</string>
+   </property>
+  </action>
+  <action name="gridColorBlackAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Черный</string>
+   </property>
+  </action>
+  <action name="gridColorGreenAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Зеленый</string>
+   </property>
+  </action>
+  <action name="gridThinAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Тонкая</string>
+   </property>
+  </action>
+  <action name="gridThickAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Утолщенная</string>
+   </property>
+  </action>
+  <action name="actionTurnOn30Degrees">
+   <property name="text">
+    <string>Поворот на 30 градусов</string>
+   </property>
+  </action>
+  <action name="actionRestoreViewAfterTurning">
+   <property name="text">
+    <string>Восстановить</string>
+   </property>
+  </action>
+  <action name="actionMoveWindowCenterToPoint">
+   <property name="text">
+    <string>Переход в точку</string>
+   </property>
+  </action>
+  <action name="actionMoveWindowCenterToObject">
+   <property name="text">
+    <string>Переход в центр объекта</string>
+   </property>
+  </action>
+  <action name="actionSetScale100000">
+   <property name="text">
+    <string>Масштаб 1:100 000</string>
+   </property>
+  </action>
+  <action name="actionSetScale200000">
+   <property name="text">
+    <string>Масштаб 1:200 000</string>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="text">
+    <string>Прямоугольная в метрах</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>Геодезическая (Международный эллипсоид WGS 1984г.)</string>
+   </property>
+  </action>
+  <action name="action_8">
+   <property name="text">
+    <string>Радианы</string>
+   </property>
+  </action>
+  <action name="action_9">
+   <property name="text">
+    <string>Градусы</string>
+   </property>
+  </action>
+  <action name="action_10">
+   <property name="text">
+    <string>Градусы, минуты, секунды</string>
+   </property>
+  </action>
+  <action name="actionSetCoordinatesInMeters">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Прямоугольная в метрах</string>
+   </property>
+  </action>
+  <action name="actionSetCoordinatesInRadians">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Радианы</string>
+   </property>
+  </action>
+  <action name="actionSetCoordinatesInDegrees">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Градусы</string>
+   </property>
+  </action>
+  <action name="actionSetCoordinatesInDegreesMinutesSeconds">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Градусы, минуты, секунды</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>Создать сценарий</string>
+   </property>
+  </action>
+  <action name="actionCreateScript">
+   <property name="text">
+    <string>Создать сценарий</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>306</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
