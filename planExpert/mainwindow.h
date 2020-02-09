@@ -12,7 +12,8 @@
 
 #include "mapapi.h"
 #include "mapwidget.h"
-#include "connectionwindow.h"
+//#include "connectionwindow.h"
+#include "dialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -40,7 +41,7 @@ private:
 
   // Интерфейс пользователя
   Ui::MainWindow *ui;
-  ConnectionWindow *cw;
+  Dialog *dw;
 
   // Перекодировщик текстов
   QTextCodec * CodecKOI8R;

@@ -64,9 +64,9 @@
     </property>
     <addaction name="actionOpenMap"/>
     <addaction name="actionCloseMap"/>
+    <addaction name="actionCreateScript"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
-    <addaction name="actionCreateScript"/>
    </widget>
    <widget class="QMenu" name="menuLimits">
     <property name="title">

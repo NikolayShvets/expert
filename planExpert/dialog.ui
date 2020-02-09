@@ -17,15 +17,15 @@
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="2" column="0" colspan="2">
-      <widget class="QTableView" name="tableView"/>
+      <widget class="QTableView" name="tablesTableView"/>
      </item>
      <item row="0" column="1">
-      <widget class="QComboBox" name="comboBox_2"/>
+      <widget class="QComboBox" name="selectTableComboBox"/>
      </item>
      <item row="0" column="0">
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="selectTableLabel">
        <property name="text">
-        <string>Выберите таблицу:</string>
+        <string/>
        </property>
       </widget>
      </item>

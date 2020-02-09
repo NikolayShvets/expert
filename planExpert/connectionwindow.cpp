@@ -12,26 +12,25 @@ ConnectionWindow::ConnectionWindow(QWidget *parent) :
 ConnectionWindow::~ConnectionWindow()
 {
     delete ui;
+    db.close();
 }
 
 void ConnectionWindow::tryToConnect()
 {
-    db = new QSqlDatabase;
-    db->addDatabase("QPSQL");
-    db->setHostName("Localhost");
-    db->setDatabaseName("ExpertDB");
-    db->setUserName(ui->loginEdit->text());
-    db->setPassword(ui->passEdit->text());
-    if(!db->open()){
-        mb->critical(this, QObject::tr("Ошибка подключения к базе данных!"),db->lastError().text());
-        qDebug() << db->driverName()<< db->tables();
+    db = QSqlDatabase::addDatabase("QPSQL");
+    db.setHostName("Localhost");
+    db.setDatabaseName("expertDB");
+    db.setUserName(ui->loginEdit->text());
+    db.setPassword(ui->passEdit->text());
+    if(!db.open()){
+        mb->critical(this, QObject::tr("Ошибка подключения к базе данных!"),db.lastError().text());
     }else{
-        mb->about(this,QObject::tr("Успешное подключение!"), "Вы вошли под логином " + ui->loginEdit->text());
-        q = new QSqlQuery;
-        qDebug() << db->driverName()<< db->tables();
+        mb->information(this,QObject::tr("Успешное подключение!"), "Вы вошли под логином " + ui->loginEdit->text());
+        qDebug() << db.driverName()<< db.tables();
         hide();
     }
 }
+
 
 void ConnectionWindow::on_connectBtn_clicked()
 {

@@ -70,9 +70,8 @@ bool MainWindow::event(QEvent *event)
 // -----------------------------------------------------------------------------
 void MainWindow::CreateScript()
 {
-    cw = new ConnectionWindow(this);
-    cw->setModal(true);
-    cw->exec();
+    dw = new Dialog(this);
+    dw->show();
 }
 
 // -----------------------------------------------------------------------------
