@@ -6,6 +6,20 @@ Dialog::Dialog(QWidget *parent) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Редактор базы данных");
+    menu = new QMenu(this);
+    /* создаем объект контекстного меню*/
+    /* добавляем действия */
+    QAction *addanote = new QAction(trUtf8("Добавить запсиь"), this);
+    QAction *delanote = new QAction(trUtf8("Удалить запись"), this);
+    QAction *alteration = new QAction(trUtf8("Редактировать запись"), this);
+    /* Подключаем слоты обработки действий контекстного меню */
+    connect(addanote, SIGNAL(triggered()), this, SLOT(addNote()));
+    connect(delanote, SIGNAL(triggered()), this, SLOT(delNote()));
+    /* утсновка действий в меню */
+    menu->addAction(addanote);
+    menu->addAction(delanote);
+    menu->addAction(alteration);
     openConnectWindow();
 }
 
@@ -24,15 +38,15 @@ bool Dialog::getTables(/*QVariantList &data*/)
     q = new QSqlQuery();
     tables.append(db.tables());
     this->ui->selectTableComboBox->setEditable(true);
-    this->ui->selectTableComboBox->lineEdit()->setPlaceholderText("Выберите таблицу...");
+    this->ui->selectTableComboBox->lineEdit()->setText("Выберите таблицу...");
 
     for(int i = 0; i < tables.count(); ++i){
         q->exec("SELECT *FROM " + tables[i]);
         rec = q->record();
         for(int j = 0; j < rec.count(); j++){
             fields.append(rec.fieldName(j));
-            // qDebug()<<"filed name:"<</*rec.fieldName(j)<<
-                     //       "type"<<rec.field(j).type() << */"relation: " << rec.keyValues(rec);
+             //qDebug()<<"filed name:"<<rec.fieldName(j)<<
+               //             "type"<<rec.fieldName(j).ty << "relation: " << rec.keyValues(rec);
         }
         this->ui->selectTableComboBox->addItem(tables[i]);
     }
@@ -56,7 +70,7 @@ void Dialog::createUI()
     //this->ui->tablesTableView->setItemDelegate(new QSqlRelationalDelegate(tableData));
  // tableData->setItemDelegateForRow(1, new QSqlRelationalDelegate(tableData));
  // tableData->setItemDelegateForRow(2, new QSqlRelationalDelegate(tableData));
-    this->ui->tablesTableView->setColumnHidden(0,true);
+    this->ui->tablesTableView->setColumnHidden(tm->columnCount() - 1,true);
  // Разрешаем выделение строк
     this->ui->tablesTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
  // Устанавливаем режим выделения лишь одно строки в таблице
@@ -65,8 +79,8 @@ void Dialog::createUI()
     this->ui->tablesTableView->horizontalHeader()->setStretchLastSection(true);
     this->ui->tablesTableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
-  //connect(tableData, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(addANote()));
-  //connect(tableData, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotCustomMenuReauested(QPoint)));
+    connect(this->ui->tablesTableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(addNote()));
+    connect(this->ui->tablesTableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotCustomMenuReauested(QPoint)));
 
     tm->select();
  // Устанавливаем размер колонок по содержимому
@@ -81,30 +95,73 @@ void Dialog::showTable()
     this->createUI();
 }
 
+void Dialog::addNote()
+{
+    int row = this->ui->tablesTableView->selectionModel()->currentIndex().row() + 1;
+    tm->insertRow(row);
+    qDebug()<<row;
+}
+
+void Dialog::delNote()
+{
+    /* получаем индекс выбранной строки */
+    int row = this->ui->tablesTableView->selectionModel()->currentIndex().row();
+    qDebug()<<row;
+
+    /* проверяем была ли строка действительно выбрана */
+    if (row >= 0){
+        /* спрашиваем удалить запись или нет */
+        if(QMessageBox::warning(this, trUtf8("Удаление записи"), trUtf8("Удалить запись?"),
+                                QMessageBox::Yes | QMessageBox::No) == QMessageBox::No)
+        {
+            /* При отрицательном ответе делаем откат действий
+             * и закрываем диалог без удаления записи
+             * */
+            db.rollback();
+            qDebug()<<"NO";
+            return;
+        }else{
+            /* Иначе удаляем запись
+             * при успешном удалении обновляем таблицу
+             * */
+            this->ui->tablesTableView->model()->removeRow(row);
+            qDebug()<<"YES";
+            if(!tm->removeRow(row)){
+                QMessageBox::warning(this, trUtf8("Уведомление"), trUtf8("Не удалось удалить запись\n"
+                                                                             "Возможно она используется другими таблицами\n"                                                             "Проверьте зависимости и повторите попытку"));
+            }
+            //modelMain->select();
+            this->ui->tablesTableView->setCurrentIndex(tm->index(-1,-1));
+        }
+    }
+}
+
 void Dialog::slotCustomMenuReauested(QPoint pos)
 {
-    /* создаем объект контекстного меню*/
-        menu = new QMenu(this);
-        /* добавляем действия */
-        QAction *addanote = new QAction(trUtf8("Добавить запсиь"), this);
-        QAction *delanote = new QAction(trUtf8("Удалить запись"), this);
-        QAction *alteration = new QAction(trUtf8("Редактировать запись"), this);
-        /* Подключаем слоты обработки действий контекстного меню */
-        connect(addanote, SIGNAL(triggered()), this, SLOT(addANote()));
-        connect(delanote, SIGNAL(triggered()), this, SLOT(dellANote()));
-        connect(alteration, SIGNAL(triggered()), this, SLOT(showCorrectForm()));
-        /* утсновка действий в меню */
-        menu->addAction(addanote);
-        menu->addAction(delanote);
-        menu->addAction(alteration);
-        /* вызов контекстного меню */
-        //tableData->viewport()->update();
-        menu->popup(this->ui->tablesTableView->viewport()->mapToGlobal(pos));
-        //menu->close();
+    this->ui->tablesTableView->viewport()->update();
+    menu->popup(this->ui->tablesTableView->viewport()->mapToGlobal(pos));
+}
+
+void Dialog::saveChanges()
+{
+    tm->submit();
+    if(!tm->submitAll()){
+        qDebug()<<"False: "<<tm->lastError();
+        mb->critical(this, QObject::tr("Ошибка обращения к базе данных!"),db.lastError().text());
+    }else{
+        qDebug()<<"true"<<tm->lastError();
+    }
+    tm->select();
+    this->ui->tablesTableView->resizeColumnsToContents();
 }
 
 Dialog::~Dialog()
 {
     this->db.close();
     delete ui;
+}
+
+void Dialog::on_saveBtn_clicked()
+{
+    saveChanges();
 }

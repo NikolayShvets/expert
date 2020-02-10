@@ -6,6 +6,7 @@ ConnectionWindow::ConnectionWindow(QWidget *parent) :
     ui(new Ui::ConnectionWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Авторизация");
     mb = new QMessageBox(this);
 }
 
@@ -35,4 +36,9 @@ void ConnectionWindow::tryToConnect()
 void ConnectionWindow::on_connectBtn_clicked()
 {
     tryToConnect();
+}
+
+void ConnectionWindow::on_cancelBtn_clicked()
+{
+    hide();
 }

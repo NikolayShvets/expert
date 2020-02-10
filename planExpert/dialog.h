@@ -15,6 +15,12 @@
 #include <QSqlRecord>
 #include <QComboBox>
 #include <QMenu>
+#include <QSqlField>
+#include <QSqlRelation>
+#include <QSqlRecord>
+#include <QSqlRelationalTableModel>
+#include <QSqlRelationalDelegate>
+#include <QSqlRelation>
 #include "connectionwindow.h"
 
 namespace Ui {
@@ -31,6 +37,11 @@ public:
 private slots:
     void showTable();
     void slotCustomMenuReauested(QPoint pos);
+    void addNote();
+    void delNote();
+    void saveChanges();
+    void on_saveBtn_clicked();
+
 private:
     Ui::Dialog *ui;
     QSqlTableModel * tm;

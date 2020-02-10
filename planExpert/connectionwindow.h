@@ -23,6 +23,8 @@ public:
 private slots:
     void on_connectBtn_clicked();
 
+    void on_cancelBtn_clicked();
+
 private:
     Ui::ConnectionWindow *ui;
     QMessageBox *mb;

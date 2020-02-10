@@ -19,13 +19,13 @@
      <item row="2" column="0" colspan="2">
       <widget class="QTableView" name="tablesTableView"/>
      </item>
-     <item row="0" column="1">
+     <item row="1" column="0">
       <widget class="QComboBox" name="selectTableComboBox"/>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="selectTableLabel">
+     <item row="1" column="1">
+      <widget class="QPushButton" name="saveBtn">
        <property name="text">
-        <string/>
+        <string>Сохранить изменения в текущей таблице</string>
        </property>
       </widget>
      </item>
