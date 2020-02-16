@@ -20,7 +20,6 @@
 #include <QSqlRecord>
 #include <QSqlRelationalTableModel>
 #include <QSqlRelationalDelegate>
-#include <QSqlRelation>
 #include "connectionwindow.h"
 
 namespace Ui {
@@ -45,6 +44,7 @@ private slots:
 private:
     Ui::Dialog *ui;
     QSqlTableModel * tm;
+    QSqlRelationalTableModel * model;
     QSqlQueryModel *qm;
     QSqlQuery *q;
     QMessageBox *mb;
@@ -57,6 +57,7 @@ private:
     void openConnectWindow();
     bool getTables(/*QVariantList &data*/);
     void setupModel(QString &tableName);
+    void setupMainModel(const QString &tableName);
     void createUI();
 };
 

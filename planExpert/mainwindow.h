@@ -48,6 +48,14 @@ private:
 
 public slots:
 
+  // добавление цели из базы
+  //bool addTargetFromDB();
+  // добавление боевой единицы из базы
+  //bool addCombatUnitFromDB();
+  // рисование на карте
+  //bool drawCircle();
+  //bool drawLine();
+
   // Открытие карты
   void OpenMap();
 

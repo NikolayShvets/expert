@@ -19,6 +19,7 @@ public:
     explicit ConnectionWindow(QWidget *parent = 0);
     ~ConnectionWindow();
     QSqlDatabase db;
+    bool connectFlag{false};
 
 private slots:
     void on_connectBtn_clicked();

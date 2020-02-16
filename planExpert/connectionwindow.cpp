@@ -28,6 +28,7 @@ void ConnectionWindow::tryToConnect()
     }else{
         mb->information(this,QObject::tr("Успешное подключение!"), "Вы вошли под логином " + ui->loginEdit->text());
         qDebug() << db.driverName()<< db.tables();
+        connectFlag = true;
         hide();
     }
 }

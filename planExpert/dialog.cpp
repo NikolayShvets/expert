@@ -28,9 +28,13 @@ void Dialog::openConnectWindow()
     cw = new ConnectionWindow(this);
     cw->setModal(true);
     cw->exec();
-    db=cw->db;
-    qDebug() <<"test"<< this->db.driverName()<< db.tables();
-    getTables();
+    if(cw->connectFlag){
+        db=cw->db;
+        qDebug() <<"test"<< this->db.driverName()<< db.tables();
+        getTables();
+    }else{
+        this->ui->saveBtn->setEnabled(false);
+    }
 }
 
 bool Dialog::getTables(/*QVariantList &data*/)
@@ -64,10 +68,19 @@ void Dialog::setupModel(QString &tableName)
     }
 }
 
+void Dialog::setupMainModel(const QString &tableName)
+{
+    model = new QSqlRelationalTableModel(this);
+    model->setTable(tableName);
+   // model->setRelation(1, QSqlRelation("targettype", "id", "name"));
+    model->setSort(0, Qt::AscendingOrder);
+    model->select();
+}
+
 void Dialog::createUI()
 {
-    this->ui->tablesTableView->setModel(tm);
-    //this->ui->tablesTableView->setItemDelegate(new QSqlRelationalDelegate(tableData));
+    /*this->ui->tablesTableView->setModel(tm);
+    this->ui->tablesTableView->setItemDelegate(new QSqlRelationalDelegate(tableData));
  // tableData->setItemDelegateForRow(1, new QSqlRelationalDelegate(tableData));
  // tableData->setItemDelegateForRow(2, new QSqlRelationalDelegate(tableData));
     this->ui->tablesTableView->setColumnHidden(tm->columnCount() - 1,true);
@@ -77,29 +90,53 @@ void Dialog::createUI()
     this->ui->tablesTableView->setSelectionMode(QAbstractItemView::SingleSelection);
   //tableData->setEditTriggers(QAbstractItemView::NoEditTriggers);
     this->ui->tablesTableView->horizontalHeader()->setStretchLastSection(true);
+    this->ui->tablesTableView->setContextMenuPolicy(Qt::CustomContextMenu);*/
+
+    this->ui->tablesTableView->setModel(model);
+    this->ui->tablesTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    this->ui->tablesTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+   // this->ui->tablesTableView->setItemDelegate(new QSqlRelationalDelegate(this->ui->tablesTableView));
+   // this->ui->tablesTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    this->ui->tablesTableView->setColumnHidden(0,true);
+    this->ui->tablesTableView->horizontalHeader()->setStretchLastSection(true);
     this->ui->tablesTableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(this->ui->tablesTableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(addNote()));
+  //  connect(this->ui->tablesTableView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(addNote()));
     connect(this->ui->tablesTableView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(slotCustomMenuReauested(QPoint)));
 
-    tm->select();
- // Устанавливаем размер колонок по содержимому
+    model->select();
     this->ui->tablesTableView->resizeColumnsToContents();
+    //tm->select();
+ // Устанавливаем размер колонок по содержимому
+    //this->ui->tablesTableView->resizeColumnsToContents();
 }
 
 void Dialog::showTable()
 {
     tableName = this->ui->selectTableComboBox->currentText();
     qDebug()<<"selected table: "<<tableName;
-    this->setupModel(tableName);
+    //this->setupModel(tableName);
+    this->setupMainModel(tableName);
     this->createUI();
+
 }
 
 void Dialog::addNote()
 {
     int row = this->ui->tablesTableView->selectionModel()->currentIndex().row() + 1;
-    tm->insertRow(row);
-    qDebug()<<row;
+    model->insertRow(row);
+    /*q->prepare("INSERT INTO criticalcombination (start_x) values (1000)");
+    q->exec();
+    qDebug()<<db.lastError();
+    q->prepare("SELECT column_name FROM information_schema.columns WHERE table_name =  'target' ");
+    q->exec();
+    QString name = q->value(0).toString();
+    /*while (q->next()) {
+             QString name = q->value(0).toString();
+             qDebug() << name;
+         }*/
+    /*qDebug()<<name;
+    qDebug()<<db.lastError();*/
 }
 
 void Dialog::delNote()
@@ -126,12 +163,12 @@ void Dialog::delNote()
              * */
             this->ui->tablesTableView->model()->removeRow(row);
             qDebug()<<"YES";
-            if(!tm->removeRow(row)){
+            if(!model->removeRow(row)){
                 QMessageBox::warning(this, trUtf8("Уведомление"), trUtf8("Не удалось удалить запись\n"
                                                                              "Возможно она используется другими таблицами\n"                                                             "Проверьте зависимости и повторите попытку"));
             }
-            //modelMain->select();
-            this->ui->tablesTableView->setCurrentIndex(tm->index(-1,-1));
+            model->select();
+            this->ui->tablesTableView->setCurrentIndex(model->index(-1,-1));
         }
     }
 }
@@ -144,14 +181,14 @@ void Dialog::slotCustomMenuReauested(QPoint pos)
 
 void Dialog::saveChanges()
 {
-    tm->submit();
-    if(!tm->submitAll()){
-        qDebug()<<"False: "<<tm->lastError();
+    model->submit();
+    if(!model->submitAll()){
+        qDebug()<<"False: "<<model->lastError();
         mb->critical(this, QObject::tr("Ошибка обращения к базе данных!"),db.lastError().text());
     }else{
-        qDebug()<<"true"<<tm->lastError();
+        qDebug()<<"true"<<model->lastError();
     }
-    tm->select();
+    model->select();
     this->ui->tablesTableView->resizeColumnsToContents();
 }
 
